@@ -34,7 +34,7 @@ function Home() {
   return (
     <PublicShell>
       <section className="polar-gradient text-primary-foreground">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 lg:grid-cols-2 lg:items-center lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 lg:grid-cols-1 lg:items-start lg:py-24">
           <div>
             <Badge className="bg-accent text-accent-foreground hover:bg-accent">
               Since {site.established} · 44 Antarctic expeditions
