@@ -366,13 +366,13 @@ export function getDataset(id: string) {
 }
 
 export interface DatasetQuery {
-  q?: string;
-  theme?: string;
-  region?: string;
-  access?: string;
-  from?: string;
-  to?: string;
-  sort?: "relevance" | "recent" | "downloads" | "citations";
+  q?: string | undefined;
+  theme?: string | undefined;
+  region?: string | undefined;
+  access?: string | undefined;
+  from?: string | undefined;
+  to?: string | undefined;
+  sort?: "relevance" | "recent" | "downloads" | "citations" | undefined;
 }
 
 export function searchDatasets(query: DatasetQuery): Dataset[] {
