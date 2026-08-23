@@ -10,33 +10,240 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as MediaRouteImport } from './routes/media'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminSubmissionsRouteImport } from './routes/admin.submissions'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as ExpeditionsIndexRouteImport } from './routes/expeditions.index'
+import { Route as ExpeditionsSlugRouteImport } from './routes/expeditions.$slug'
+import { Route as LearningIndexRouteImport } from './routes/learning.index'
+import { Route as LearningSlugRouteImport } from './routes/learning.$slug'
+import { Route as RepositoryIndexRouteImport } from './routes/repository.index'
+import { Route as RepositoryIdRouteImport } from './routes/repository.$id'
+import { Route as RepositoryUploadRouteImport } from './routes/repository.upload'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaRoute = MediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSubmissionsRoute = AdminSubmissionsRouteImport.update({
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const ExpeditionsIndexRoute = ExpeditionsIndexRouteImport.update({
+  id: '/expeditions/',
+  path: '/expeditions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpeditionsSlugRoute = ExpeditionsSlugRouteImport.update({
+  id: '/expeditions/$slug',
+  path: '/expeditions/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearningIndexRoute = LearningIndexRouteImport.update({
+  id: '/learning/',
+  path: '/learning/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearningSlugRoute = LearningSlugRouteImport.update({
+  id: '/learning/$slug',
+  path: '/learning/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepositoryIndexRoute = RepositoryIndexRouteImport.update({
+  id: '/repository/',
+  path: '/repository/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepositoryIdRoute = RepositoryIdRouteImport.update({
+  id: '/repository/$id',
+  path: '/repository/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepositoryUploadRoute = RepositoryUploadRouteImport.update({
+  id: '/repository/upload',
+  path: '/repository/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
+  '/media': typeof MediaRoute
+  '/admin/submissions': typeof AdminSubmissionsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/expeditions/$slug': typeof ExpeditionsSlugRoute
+  '/learning/$slug': typeof LearningSlugRoute
+  '/repository/$id': typeof RepositoryIdRoute
+  '/repository/upload': typeof RepositoryUploadRoute
+  '/admin/': typeof AdminIndexRoute
+  '/expeditions/': typeof ExpeditionsIndexRoute
+  '/learning/': typeof LearningIndexRoute
+  '/repository/': typeof RepositoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
+  '/media': typeof MediaRoute
+  '/admin/submissions': typeof AdminSubmissionsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/expeditions/$slug': typeof ExpeditionsSlugRoute
+  '/learning/$slug': typeof LearningSlugRoute
+  '/repository/$id': typeof RepositoryIdRoute
+  '/repository/upload': typeof RepositoryUploadRoute
+  '/admin': typeof AdminIndexRoute
+  '/expeditions': typeof ExpeditionsIndexRoute
+  '/learning': typeof LearningIndexRoute
+  '/repository': typeof RepositoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
+  '/media': typeof MediaRoute
+  '/admin/submissions': typeof AdminSubmissionsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/expeditions/$slug': typeof ExpeditionsSlugRoute
+  '/learning/$slug': typeof LearningSlugRoute
+  '/repository/$id': typeof RepositoryIdRoute
+  '/repository/upload': typeof RepositoryUploadRoute
+  '/admin/': typeof AdminIndexRoute
+  '/expeditions/': typeof ExpeditionsIndexRoute
+  '/learning/': typeof LearningIndexRoute
+  '/repository/': typeof RepositoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/auth'
+    | '/contact'
+    | '/dashboard'
+    | '/media'
+    | '/admin/submissions'
+    | '/admin/users'
+    | '/expeditions/$slug'
+    | '/learning/$slug'
+    | '/repository/$id'
+    | '/repository/upload'
+    | '/admin/'
+    | '/expeditions/'
+    | '/learning/'
+    | '/repository/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/contact'
+    | '/dashboard'
+    | '/media'
+    | '/admin/submissions'
+    | '/admin/users'
+    | '/expeditions/$slug'
+    | '/learning/$slug'
+    | '/repository/$id'
+    | '/repository/upload'
+    | '/admin'
+    | '/expeditions'
+    | '/learning'
+    | '/repository'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/auth'
+    | '/contact'
+    | '/dashboard'
+    | '/media'
+    | '/admin/submissions'
+    | '/admin/users'
+    | '/expeditions/$slug'
+    | '/learning/$slug'
+    | '/repository/$id'
+    | '/repository/upload'
+    | '/admin/'
+    | '/expeditions/'
+    | '/learning/'
+    | '/repository/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRoute
+  MediaRoute: typeof MediaRoute
+  ExpeditionsSlugRoute: typeof ExpeditionsSlugRoute
+  LearningSlugRoute: typeof LearningSlugRoute
+  RepositoryIdRoute: typeof RepositoryIdRoute
+  RepositoryUploadRoute: typeof RepositoryUploadRoute
+  ExpeditionsIndexRoute: typeof ExpeditionsIndexRoute
+  LearningIndexRoute: typeof LearningIndexRoute
+  RepositoryIndexRoute: typeof RepositoryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +255,150 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media': {
+      id: '/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof MediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/submissions': {
+      id: '/admin/submissions'
+      path: '/submissions'
+      fullPath: '/admin/submissions'
+      preLoaderRoute: typeof AdminSubmissionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/expeditions/': {
+      id: '/expeditions/'
+      path: '/expeditions'
+      fullPath: '/expeditions/'
+      preLoaderRoute: typeof ExpeditionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/expeditions/$slug': {
+      id: '/expeditions/$slug'
+      path: '/expeditions/$slug'
+      fullPath: '/expeditions/$slug'
+      preLoaderRoute: typeof ExpeditionsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learning/': {
+      id: '/learning/'
+      path: '/learning'
+      fullPath: '/learning/'
+      preLoaderRoute: typeof LearningIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learning/$slug': {
+      id: '/learning/$slug'
+      path: '/learning/$slug'
+      fullPath: '/learning/$slug'
+      preLoaderRoute: typeof LearningSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repository/': {
+      id: '/repository/'
+      path: '/repository'
+      fullPath: '/repository/'
+      preLoaderRoute: typeof RepositoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repository/$id': {
+      id: '/repository/$id'
+      path: '/repository/$id'
+      fullPath: '/repository/$id'
+      preLoaderRoute: typeof RepositoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repository/upload': {
+      id: '/repository/upload'
+      path: '/repository/upload'
+      fullPath: '/repository/upload'
+      preLoaderRoute: typeof RepositoryUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminSubmissionsRoute: typeof AdminSubmissionsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminSubmissionsRoute: AdminSubmissionsRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRoute,
+  MediaRoute: MediaRoute,
+  ExpeditionsSlugRoute: ExpeditionsSlugRoute,
+  LearningSlugRoute: LearningSlugRoute,
+  RepositoryIdRoute: RepositoryIdRoute,
+  RepositoryUploadRoute: RepositoryUploadRoute,
+  ExpeditionsIndexRoute: ExpeditionsIndexRoute,
+  LearningIndexRoute: LearningIndexRoute,
+  RepositoryIndexRoute: RepositoryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
