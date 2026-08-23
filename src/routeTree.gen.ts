@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as MediaRouteImport } from './routes/media'
 import { Route as ExpeditionsIndexRouteImport } from './routes/expeditions.index'
 import { Route as ExpeditionsSlugRouteImport } from './routes/expeditions.$slug'
 import { Route as LearningIndexRouteImport } from './routes/learning.index'
@@ -27,6 +31,26 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaRoute = MediaRouteImport.update({
+  id: '/media',
+  path: '/media',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExpeditionsIndexRoute = ExpeditionsIndexRouteImport.update({
@@ -68,6 +92,10 @@ const RepositoryUploadRoute = RepositoryUploadRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
+  '/media': typeof MediaRoute
   '/expeditions/$slug': typeof ExpeditionsSlugRoute
   '/learning/$slug': typeof LearningSlugRoute
   '/repository/$id': typeof RepositoryIdRoute
@@ -79,6 +107,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
+  '/media': typeof MediaRoute
   '/expeditions/$slug': typeof ExpeditionsSlugRoute
   '/learning/$slug': typeof LearningSlugRoute
   '/repository/$id': typeof RepositoryIdRoute
@@ -91,6 +123,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
+  '/media': typeof MediaRoute
   '/expeditions/$slug': typeof ExpeditionsSlugRoute
   '/learning/$slug': typeof LearningSlugRoute
   '/repository/$id': typeof RepositoryIdRoute
@@ -104,6 +140,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/auth'
+    | '/contact'
+    | '/dashboard'
+    | '/media'
     | '/expeditions/$slug'
     | '/learning/$slug'
     | '/repository/$id'
@@ -115,6 +155,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/auth'
+    | '/contact'
+    | '/dashboard'
+    | '/media'
     | '/expeditions/$slug'
     | '/learning/$slug'
     | '/repository/$id'
@@ -126,6 +170,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/auth'
+    | '/contact'
+    | '/dashboard'
+    | '/media'
     | '/expeditions/$slug'
     | '/learning/$slug'
     | '/repository/$id'
@@ -138,6 +186,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRoute
+  MediaRoute: typeof MediaRoute
   ExpeditionsSlugRoute: typeof ExpeditionsSlugRoute
   LearningSlugRoute: typeof LearningSlugRoute
   RepositoryIdRoute: typeof RepositoryIdRoute
@@ -161,6 +213,34 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media': {
+      id: '/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof MediaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/expeditions/': {
@@ -218,6 +298,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRoute,
+  MediaRoute: MediaRoute,
   ExpeditionsSlugRoute: ExpeditionsSlugRoute,
   LearningSlugRoute: LearningSlugRoute,
   RepositoryIdRoute: RepositoryIdRoute,
