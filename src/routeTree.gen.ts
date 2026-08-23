@@ -13,8 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ExpeditionsIndexRouteImport } from './routes/expeditions.index'
 import { Route as ExpeditionsSlugRouteImport } from './routes/expeditions.$slug'
+import { Route as LearningIndexRouteImport } from './routes/learning.index'
+import { Route as LearningSlugRouteImport } from './routes/learning.$slug'
 import { Route as RepositoryIndexRouteImport } from './routes/repository.index'
 import { Route as RepositoryIdRouteImport } from './routes/repository.$id'
+import { Route as RepositoryUploadRouteImport } from './routes/repository.upload'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,6 +39,16 @@ const ExpeditionsSlugRoute = ExpeditionsSlugRouteImport.update({
   path: '/expeditions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LearningIndexRoute = LearningIndexRouteImport.update({
+  id: '/learning/',
+  path: '/learning/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearningSlugRoute = LearningSlugRouteImport.update({
+  id: '/learning/$slug',
+  path: '/learning/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RepositoryIndexRoute = RepositoryIndexRouteImport.update({
   id: '/repository/',
   path: '/repository/',
@@ -46,21 +59,32 @@ const RepositoryIdRoute = RepositoryIdRouteImport.update({
   path: '/repository/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RepositoryUploadRoute = RepositoryUploadRouteImport.update({
+  id: '/repository/upload',
+  path: '/repository/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/expeditions/$slug': typeof ExpeditionsSlugRoute
+  '/learning/$slug': typeof LearningSlugRoute
   '/repository/$id': typeof RepositoryIdRoute
+  '/repository/upload': typeof RepositoryUploadRoute
   '/expeditions/': typeof ExpeditionsIndexRoute
+  '/learning/': typeof LearningIndexRoute
   '/repository/': typeof RepositoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/expeditions/$slug': typeof ExpeditionsSlugRoute
+  '/learning/$slug': typeof LearningSlugRoute
   '/repository/$id': typeof RepositoryIdRoute
+  '/repository/upload': typeof RepositoryUploadRoute
   '/expeditions': typeof ExpeditionsIndexRoute
+  '/learning': typeof LearningIndexRoute
   '/repository': typeof RepositoryIndexRoute
 }
 export interface FileRoutesById {
@@ -68,8 +92,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/expeditions/$slug': typeof ExpeditionsSlugRoute
+  '/learning/$slug': typeof LearningSlugRoute
   '/repository/$id': typeof RepositoryIdRoute
+  '/repository/upload': typeof RepositoryUploadRoute
   '/expeditions/': typeof ExpeditionsIndexRoute
+  '/learning/': typeof LearningIndexRoute
   '/repository/': typeof RepositoryIndexRoute
 }
 export interface FileRouteTypes {
@@ -78,24 +105,33 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/expeditions/$slug'
+    | '/learning/$slug'
     | '/repository/$id'
+    | '/repository/upload'
     | '/expeditions/'
+    | '/learning/'
     | '/repository/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/expeditions/$slug'
+    | '/learning/$slug'
     | '/repository/$id'
+    | '/repository/upload'
     | '/expeditions'
+    | '/learning'
     | '/repository'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/expeditions/$slug'
+    | '/learning/$slug'
     | '/repository/$id'
+    | '/repository/upload'
     | '/expeditions/'
+    | '/learning/'
     | '/repository/'
   fileRoutesById: FileRoutesById
 }
@@ -103,8 +139,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ExpeditionsSlugRoute: typeof ExpeditionsSlugRoute
+  LearningSlugRoute: typeof LearningSlugRoute
   RepositoryIdRoute: typeof RepositoryIdRoute
+  RepositoryUploadRoute: typeof RepositoryUploadRoute
   ExpeditionsIndexRoute: typeof ExpeditionsIndexRoute
+  LearningIndexRoute: typeof LearningIndexRoute
   RepositoryIndexRoute: typeof RepositoryIndexRoute
 }
 
@@ -138,6 +177,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExpeditionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/learning/': {
+      id: '/learning/'
+      path: '/learning'
+      fullPath: '/learning/'
+      preLoaderRoute: typeof LearningIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learning/$slug': {
+      id: '/learning/$slug'
+      path: '/learning/$slug'
+      fullPath: '/learning/$slug'
+      preLoaderRoute: typeof LearningSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/repository/': {
       id: '/repository/'
       path: '/repository'
@@ -152,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RepositoryIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/repository/upload': {
+      id: '/repository/upload'
+      path: '/repository/upload'
+      fullPath: '/repository/upload'
+      preLoaderRoute: typeof RepositoryUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -159,8 +219,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ExpeditionsSlugRoute: ExpeditionsSlugRoute,
+  LearningSlugRoute: LearningSlugRoute,
   RepositoryIdRoute: RepositoryIdRoute,
+  RepositoryUploadRoute: RepositoryUploadRoute,
   ExpeditionsIndexRoute: ExpeditionsIndexRoute,
+  LearningIndexRoute: LearningIndexRoute,
   RepositoryIndexRoute: RepositoryIndexRoute,
 }
 export const routeTree = rootRouteImport

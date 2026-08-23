@@ -135,7 +135,7 @@ function UploadPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <Label htmlFor="theme">Theme</Label>
-                  <Select defaultValue={themes[0]}>
+                  <Select defaultValue={themes[0]!}>
                     <SelectTrigger id="theme" className="mt-1.5">
                       <SelectValue />
                     </SelectTrigger>
