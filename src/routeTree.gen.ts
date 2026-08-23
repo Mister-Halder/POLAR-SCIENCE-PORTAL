@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as ExpeditionsIndexRouteImport } from './routes/expeditions.index'
+import { Route as ExpeditionsSlugRouteImport } from './routes/expeditions.$slug'
+import { Route as RepositoryIndexRouteImport } from './routes/repository.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +25,65 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExpeditionsIndexRoute = ExpeditionsIndexRouteImport.update({
+  id: '/expeditions/',
+  path: '/expeditions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpeditionsSlugRoute = ExpeditionsSlugRouteImport.update({
+  id: '/expeditions/$slug',
+  path: '/expeditions/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepositoryIndexRoute = RepositoryIndexRouteImport.update({
+  id: '/repository/',
+  path: '/repository/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/expeditions/$slug': typeof ExpeditionsSlugRoute
+  '/expeditions/': typeof ExpeditionsIndexRoute
+  '/repository/': typeof RepositoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/expeditions/$slug': typeof ExpeditionsSlugRoute
+  '/expeditions': typeof ExpeditionsIndexRoute
+  '/repository': typeof RepositoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/expeditions/$slug': typeof ExpeditionsSlugRoute
+  '/expeditions/': typeof ExpeditionsIndexRoute
+  '/repository/': typeof RepositoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths:
+    '/' | '/about' | '/expeditions/$slug' | '/expeditions/' | '/repository/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/about' | '/expeditions/$slug' | '/expeditions' | '/repository'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/expeditions/$slug'
+    | '/expeditions/'
+    | '/repository/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ExpeditionsSlugRoute: typeof ExpeditionsSlugRoute
+  ExpeditionsIndexRoute: typeof ExpeditionsIndexRoute
+  RepositoryIndexRoute: typeof RepositoryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +102,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/expeditions/': {
+      id: '/expeditions/'
+      path: '/expeditions'
+      fullPath: '/expeditions/'
+      preLoaderRoute: typeof ExpeditionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/expeditions/$slug': {
+      id: '/expeditions/$slug'
+      path: '/expeditions/$slug'
+      fullPath: '/expeditions/$slug'
+      preLoaderRoute: typeof ExpeditionsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repository/': {
+      id: '/repository/'
+      path: '/repository'
+      fullPath: '/repository/'
+      preLoaderRoute: typeof RepositoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ExpeditionsSlugRoute: ExpeditionsSlugRoute,
+  ExpeditionsIndexRoute: ExpeditionsIndexRoute,
+  RepositoryIndexRoute: RepositoryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
