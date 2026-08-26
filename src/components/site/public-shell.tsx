@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { Toaster } from "@/components/ui/sonner";
+import { PolarisChatbot } from "@/features/ai/components/polaris-chatbot";
 
 export function PublicShell({ children }: { children: ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
         {children}
       </main>
       <SiteFooter />
+      <PolarisChatbot />
       <Toaster />
     </div>
   );
