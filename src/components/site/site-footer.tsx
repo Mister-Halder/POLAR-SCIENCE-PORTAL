@@ -8,6 +8,7 @@ const columns = [
     links: [
       { to: "/expeditions", label: "Expeditions" },
       { to: "/repository", label: "Data repository" },
+      { to: "/simplifier", label: "AI Science Simplifier" },
       { to: "/media", label: "Media gallery" },
       { to: "/learning", label: "Learning modules" },
     ],

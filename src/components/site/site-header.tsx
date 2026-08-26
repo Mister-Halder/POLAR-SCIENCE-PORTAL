@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Moon, Snowflake, Sun, UserRound } from "lucide-react";
+import { Bot, Menu, Moon, Snowflake, Sparkles, Sun, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -103,11 +103,21 @@ export function SiteHeader() {
             <NavLinks />
           </nav>
 
-          <div className="ml-auto flex items-center gap-1 lg:ml-0">
+          <div className="ml-auto flex items-center gap-1.5 lg:ml-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.dispatchEvent(new CustomEvent("open-polaris-ai"))}
+              className="border-accent/40 bg-accent/10 text-accent-foreground hover:bg-accent/20 hover:border-accent gap-1.5 shadow-2xs font-medium text-xs h-8 px-2.5 sm:px-3"
+            >
+              <Bot className="size-3.5 text-accent" />
+              <span>Ask AI</span>
+              <span className="hidden xl:inline-block rounded bg-accent/20 px-1 py-0.2 text-[10px] font-mono text-muted-foreground">Alt+P</span>
+            </Button>
             <ThemeToggle />
-            <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
+            <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex h-8 text-xs">
               <Link to={user ? "/dashboard" : "/auth"}>
-                <UserRound className="mr-1.5 size-4" aria-hidden />
+                <UserRound className="mr-1.5 size-3.5" aria-hidden />
                 {user ? "Dashboard" : "Sign in"}
               </Link>
             </Button>
@@ -123,6 +133,16 @@ export function SiteHeader() {
                   <NavLinks vertical onNavigate={() => setOpen(false)} />
                 </nav>
                 <div className="mt-6 grid gap-2">
+                  <Button
+                    onClick={() => {
+                      setOpen(false);
+                      window.dispatchEvent(new CustomEvent("open-polaris-ai"));
+                    }}
+                    className="bg-accent text-accent-foreground hover:bg-accent/90 gap-1.5"
+                  >
+                    <Bot className="size-4" />
+                    Ask Polaris AI
+                  </Button>
                   <Button asChild onClick={() => setOpen(false)}>
                     <Link to={user ? "/dashboard" : "/auth"}>{user ? "Dashboard" : "Sign in"}</Link>
                   </Button>

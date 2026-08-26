@@ -1,4 +1,5 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
+import { Sparkles } from "lucide-react";
 
 import { PublicShell } from "@/components/site/public-shell";
 import { Badge } from "@/components/ui/badge";
@@ -60,14 +61,22 @@ function ExpeditionDetail() {
             <span aria-hidden> / </span>
             <span>{e.code}</span>
           </nav>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Badge className="bg-accent text-accent-foreground">{e.status}</Badge>
-            <Badge variant="outline" className="border-primary-foreground/40 text-primary-foreground">
-              {e.region}
-            </Badge>
-            <Badge variant="outline" className="border-primary-foreground/40 text-primary-foreground">
-              Season {e.season}
-            </Badge>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge className="bg-accent text-accent-foreground">{e.status}</Badge>
+              <Badge variant="outline" className="border-primary-foreground/40 text-primary-foreground">
+                {e.region}
+              </Badge>
+              <Badge variant="outline" className="border-primary-foreground/40 text-primary-foreground">
+                Season {e.season}
+              </Badge>
+            </div>
+            <Button asChild size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 gap-1.5 shadow-sm">
+              <Link to="/simplifier" search={{ expedition: e.slug }}>
+                <Sparkles className="size-3.5" />
+                <span>Generate Outreach Summary</span>
+              </Link>
+            </Button>
           </div>
           <h1 className="mt-4 max-w-4xl font-display text-3xl font-bold sm:text-4xl">{e.title}</h1>
           <p className="mt-4 max-w-3xl text-primary-foreground/85">{e.summary}</p>

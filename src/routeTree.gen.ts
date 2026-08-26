@@ -16,6 +16,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as MediaRouteImport } from './routes/media'
+import { Route as SimplifierRouteImport } from './routes/simplifier'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminSubmissionsRouteImport } from './routes/admin.submissions'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -60,6 +61,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const MediaRoute = MediaRouteImport.update({
   id: '/media',
   path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimplifierRoute = SimplifierRouteImport.update({
+  id: '/simplifier',
+  path: '/simplifier',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/media': typeof MediaRoute
+  '/simplifier': typeof SimplifierRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/expeditions/$slug': typeof ExpeditionsSlugRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/media': typeof MediaRoute
+  '/simplifier': typeof SimplifierRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/expeditions/$slug': typeof ExpeditionsSlugRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/media': typeof MediaRoute
+  '/simplifier': typeof SimplifierRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/expeditions/$slug': typeof ExpeditionsSlugRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/media'
+    | '/simplifier'
     | '/admin/submissions'
     | '/admin/users'
     | '/expeditions/$slug'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/media'
+    | '/simplifier'
     | '/admin/submissions'
     | '/admin/users'
     | '/expeditions/$slug'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/media'
+    | '/simplifier'
     | '/admin/submissions'
     | '/admin/users'
     | '/expeditions/$slug'
@@ -237,6 +249,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   MediaRoute: typeof MediaRoute
+  SimplifierRoute: typeof SimplifierRoute
   ExpeditionsSlugRoute: typeof ExpeditionsSlugRoute
   LearningSlugRoute: typeof LearningSlugRoute
   RepositoryIdRoute: typeof RepositoryIdRoute
@@ -295,6 +308,13 @@ declare module '@tanstack/react-router' {
       path: '/media'
       fullPath: '/media'
       preLoaderRoute: typeof MediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simplifier': {
+      id: '/simplifier'
+      path: '/simplifier'
+      fullPath: '/simplifier'
+      preLoaderRoute: typeof SimplifierRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -392,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   MediaRoute: MediaRoute,
+  SimplifierRoute: SimplifierRoute,
   ExpeditionsSlugRoute: ExpeditionsSlugRoute,
   LearningSlugRoute: LearningSlugRoute,
   RepositoryIdRoute: RepositoryIdRoute,

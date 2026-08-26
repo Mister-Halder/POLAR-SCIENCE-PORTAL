@@ -195,6 +195,17 @@
   text-wrap: balance;
 }
 
+@utility animate-spin-slow {
+  animation: spin 12s linear infinite;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

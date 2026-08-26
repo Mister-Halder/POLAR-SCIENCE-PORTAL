@@ -10,6 +10,7 @@ export const primaryNav = [
   { to: "/", label: "Home" },
   { to: "/expeditions", label: "Expeditions" },
   { to: "/repository", label: "Data repository" },
+  { to: "/simplifier", label: "AI Simplifier" },
   { to: "/learning", label: "Learning" },
   { to: "/media", label: "Media" },
   { to: "/about", label: "About" },

@@ -1,5 +1,5 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
-import { Copy, Download, FileText, Lock } from "lucide-react";
+import { Copy, Download, FileText, Lock, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -78,11 +78,19 @@ function DatasetDetail() {
             <span aria-hidden> / </span>
             <span>{d.id}</span>
           </nav>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Badge variant="secondary">{d.theme}</Badge>
-            <Badge variant="outline">{d.expeditionCode}</Badge>
-            <Badge variant="outline">{d.version}</Badge>
-            <Badge variant="outline">{d.license}</Badge>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="secondary">{d.theme}</Badge>
+              <Badge variant="outline">{d.expeditionCode}</Badge>
+              <Badge variant="outline">{d.version}</Badge>
+              <Badge variant="outline">{d.license}</Badge>
+            </div>
+            <Button asChild size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 gap-1.5 shadow-xs">
+              <Link to="/simplifier" search={{ datasetId: d.id }}>
+                <Sparkles className="size-3.5" />
+                <span>Simplify with AI</span>
+              </Link>
+            </Button>
           </div>
           <h1 className="mt-4 max-w-4xl font-display text-3xl font-bold">{d.title}</h1>
           <p className="mt-3 text-sm text-muted-foreground">
