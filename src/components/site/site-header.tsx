@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Moon, Sun, UserRound } from "lucide-react";
+import { Menu, Moon, Snowflake, Sun, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -86,8 +86,8 @@ export function SiteHeader() {
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
           <Link to="/" className="flex items-center gap-3" aria-label={`${site.name} — home`}>
-            <span className="flex size-10 shrink-0 overflow-hidden items-center justify-center rounded-lg text-primary-foreground">
-              <img src="/logo.png" alt="Polar Science Portal Logo" className="h-full w-full object-cover" />
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-lg polar-gradient text-primary-foreground">
+              <Snowflake className="size-5" aria-hidden />
             </span>
             <span className="leading-tight">
               <span className="block font-display text-base font-semibold sm:text-lg">
