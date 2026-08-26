@@ -1,4 +1,4 @@
-import { Globe2, Map as MapIcon, Pause, Play } from "lucide-react";
+import { Globe2, Map as MapIcon, Pause, Play, ZoomIn, ZoomOut, Target } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -64,6 +64,26 @@ function graticule() {
 
 const GRID = graticule();
 
+const HQ = { id: "hq", name: "NCPOR Goa", lat: 15.39, lon: 73.81 };
+
+function getRoutePoints(start: { lat: number; lon: number }, end: { lat: number; lon: number }, steps = 30) {
+  const points: [number, number][] = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const lat = start.lat + (end.lat - start.lat) * t;
+    let lon = start.lon + (end.lon - start.lon) * t;
+    points.push([lon, lat]);
+  }
+  return points;
+}
+
+const getMockWeather = (name: string) => {
+  if (name === "Himadri") return "-8°C, Wind 12km/h";
+  if (name === "Maitri") return "-18°C, Wind 35km/h";
+  if (name === "Bharati") return "-22°C, Wind 42km/h";
+  return "28°C, Clear";
+};
+
 const views = [
   { id: "antarctic", label: "Antarctic view", lambda: 20, phi: -70 },
   { id: "arctic", label: "Arctic view", lambda: 12, phi: 72 },
@@ -76,6 +96,11 @@ export function PolarGlobe() {
   const [spinning, setSpinning] = useState(true);
   const [mode, setMode] = useState<"globe" | "map">("globe");
   const [selected, setSelected] = useState<string>("maitri");
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [mapPan, setMapPan] = useState({ x: 0, y: 0 });
+  const [targetView, setTargetView] = useState<{ lambda: number; phi: number; t: number } | null>(null);
   const [supported, setSupported] = useState(true);
   const drag = useRef<{ x: number; y: number } | null>(null);
   const frame = useRef<number | null>(null);
@@ -105,6 +130,37 @@ export function PolarGlobe() {
     };
   }, [spinning, mode]);
 
+  useEffect(() => {
+    if (!targetView) return;
+    setSpinning(false);
+    setZoom(1.5);
+    
+    const startLambda = lambda;
+    const startPhi = phi;
+    
+    let dLambda = targetView.lambda - startLambda;
+    if (dLambda > 180) dLambda -= 360;
+    if (dLambda < -180) dLambda += 360;
+    const dPhi = targetView.phi - startPhi;
+    
+    const startTime = performance.now();
+    const duration = 750;
+    let animFrame: number;
+    
+    const tick = (now: number) => {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      
+      setLambda((startLambda + dLambda * ease) % 360);
+      setPhi(startPhi + dPhi * ease);
+      
+      if (progress < 1) animFrame = requestAnimationFrame(tick);
+    };
+    animFrame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animFrame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [targetView]);
+
   const onPointerDown = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
     drag.current = { x: e.clientX, y: e.clientY };
     setSpinning(false);
@@ -118,11 +174,46 @@ export function PolarGlobe() {
     drag.current = { x: e.clientX, y: e.clientY };
     setLambda((l) => l + dx * 0.45);
     setPhi((p) => Math.max(-89, Math.min(89, p - dy * 0.45)));
+    setMapPan((pan) => ({ x: pan.x + dx * 0.5, y: pan.y + dy * 0.5 }));
   }, []);
 
   const onPointerUp = useCallback(() => {
     drag.current = null;
   }, []);
+
+  const wheelRef = useCallback((el: SVGSVGElement | null) => {
+    if (!el) return;
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      setZoom((z) => Math.max(0.5, Math.min(4, z - e.deltaY * 0.002)));
+    };
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, []);
+
+  const visibleStations = useMemo(() => stations.filter(s => s.established <= currentYear), [currentYear]);
+
+  const handleSelect = useCallback((id: string) => {
+    setSelected(id);
+    if (id === "hq") {
+      if (mode === "globe") {
+        setTargetView({ lambda: HQ.lon, phi: HQ.lat, t: Date.now() });
+      } else {
+        setMapPan({ x: -HQ.lon, y: HQ.lat });
+        setZoom(2.5);
+      }
+      return;
+    }
+    const s = visibleStations.find((st) => st.id === id);
+    if (s) {
+      if (mode === "globe") {
+        setTargetView({ lambda: s.lon, phi: s.lat, t: Date.now() });
+      } else {
+        setMapPan({ x: -s.lon, y: s.lat });
+        setZoom(2.5);
+      }
+    }
+  }, [mode, visibleStations]);
 
   const onKeyDown = useCallback((e: React.KeyboardEvent<SVGSVGElement>) => {
     const step = e.shiftKey ? 15 : 5;
@@ -137,14 +228,19 @@ export function PolarGlobe() {
 
   const markers = useMemo(
     () =>
-      stations.map((s) => ({
+      [HQ, ...visibleStations].map((s) => ({
         station: s,
         p: project(s.lon, s.lat, lambda, phi),
       })),
-    [lambda, phi],
+    [lambda, phi, visibleStations],
   );
 
-  const active = stations.find((s) => s.id === selected) ?? stations[0]!;
+  const routeLines = useMemo(
+    () => visibleStations.map((s) => polyline(getRoutePoints(HQ, s), lambda, phi)),
+    [lambda, phi, visibleStations],
+  );
+
+  const active = visibleStations.find((s) => s.id === selected) ?? visibleStations[0] ?? stations[0]!;
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:items-start">
@@ -171,16 +267,14 @@ export function PolarGlobe() {
               Map
             </Button>
           </div>
-          {mode === "globe" && (
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => setSpinning((s) => !s)}
-              aria-label={spinning ? "Pause globe rotation" : "Resume globe rotation"}
-            >
-              {spinning ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
+          <div className="flex gap-1">
+            <Button size="icon" variant="ghost" onClick={() => setZoom(z => Math.max(0.5, z - 0.3))} aria-label="Zoom out">
+              <ZoomOut className="size-4" />
             </Button>
-          )}
+            <Button size="icon" variant="ghost" onClick={() => setZoom(z => Math.min(4, z + 0.3))} aria-label="Zoom in">
+              <ZoomIn className="size-4" />
+            </Button>
+          </div>
         </div>
 
         {mode === "globe" ? (
@@ -196,9 +290,29 @@ export function PolarGlobe() {
               onPointerUp={onPointerUp}
               onPointerCancel={onPointerUp}
               onKeyDown={onKeyDown}
+              ref={wheelRef}
             >
-              <defs>
-                <radialGradient id="globe-shade" cx="32%" cy="26%" r="78%">
+              <g style={{ transform: `scale(${zoom})`, transformOrigin: `${CENTER}px ${CENTER}px`, transition: 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)' }}>
+                <style>
+                  {`
+                    @keyframes flow {
+                      to { stroke-dashoffset: -20; }
+                    }
+                    .route-line {
+                      animation: flow 1.5s linear infinite;
+                    }
+                  `}
+                </style>
+                <defs>
+                  <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="2.5" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                  <radialGradient id="globe-shade" cx="32%" cy="26%" r="78%">
                   <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.55" />
                   <stop offset="60%" stopColor="var(--color-primary)" stopOpacity="0.25" />
                   <stop offset="100%" stopColor="#000" stopOpacity="0.55" />
@@ -251,50 +365,110 @@ export function PolarGlobe() {
                 stroke="var(--color-accent)"
                 strokeOpacity={0.6}
               />
+              {routeLines.flatMap((segments, i) =>
+                segments.map((pts, j) => (
+                  <polyline
+                    key={`route-${i}-${j}`}
+                    points={pts}
+                    fill="none"
+                    stroke="var(--color-accent)"
+                    strokeOpacity={0.9}
+                    strokeWidth={1.8}
+                    strokeDasharray="4 4"
+                    className="route-line"
+                    filter="url(#glow)"
+                  />
+                )),
+              )}
               {markers.map(({ station, p }) =>
                 p.visible ? (
                   <g key={station.id}>
                     <circle
                       cx={p.x}
                       cy={p.y}
-                      r={selected === station.id ? 8 : 5.5}
-                      fill={selected === station.id ? "var(--color-accent)" : "var(--color-ice)"}
-                      stroke="var(--color-primary)"
+                      r={selected === station.id ? 8 : station.id === "hq" ? 6 : 5.5}
                       strokeWidth={1.5}
-                      className="cursor-pointer"
+                      className={cn(
+                        "cursor-pointer transition-all duration-200",
+                        selected === station.id
+                          ? "fill-[var(--color-accent)] stroke-foreground"
+                          : station.id === "hq"
+                            ? "fill-amber-500 stroke-[var(--color-card)] hover:brightness-110"
+                            : "fill-[var(--color-ice)] stroke-[var(--color-primary)] hover:fill-[var(--color-accent)] hover:stroke-foreground"
+                      )}
                       onPointerDown={(e) => e.stopPropagation()}
-                      onClick={() => setSelected(station.id)}
+                      onClick={() => handleSelect(station.id)}
+                      onPointerEnter={() => setHovered(station.id)}
+                      onPointerLeave={() => setHovered(null)}
                     />
                     <text
                       x={p.x + 11}
                       y={p.y + 4}
-                      fill="var(--color-ice)"
+                      fill="var(--color-foreground)"
                       fontSize="10"
-                      className="pointer-events-none select-none"
+                      fontWeight="500"
+                      className="pointer-events-none select-none drop-shadow-md"
                     >
                       {station.name}
                     </text>
+                    {hovered === station.id && (
+                      <g className="pointer-events-none transition-opacity">
+                        <rect x={p.x + 11} y={p.y - 32} width="115" height="38" rx="4" fill="var(--color-card)" stroke="var(--color-border)" strokeWidth="1" opacity="0.95" />
+                        <text x={p.x + 18} y={p.y - 18} fill="var(--color-foreground)" fontSize="11" fontWeight="bold">{station.name}</text>
+                        <text x={p.x + 18} y={p.y - 4} fill="var(--color-accent)" fontSize="10" fontWeight="500">{getMockWeather(station.name)}</text>
+                      </g>
+                    )}
                   </g>
                 ) : null,
               )}
+              </g>
             </svg>
             <div className="mt-3 flex flex-wrap gap-1.5">
+              <Button
+                size="sm"
+                variant="secondary"
+                className="mr-2"
+                onClick={() => setSpinning((s) => !s)}
+              >
+                {spinning ? (
+                  <>
+                    <Pause className="mr-1.5 size-4" aria-hidden />
+                    Pause
+                  </>
+                ) : (
+                  <>
+                    <Play className="mr-1.5 size-4" aria-hidden />
+                    Continue
+                  </>
+                )}
+              </Button>
               {views.map((v) => (
                 <Button
                   key={v.id}
                   size="sm"
                   variant="secondary"
                   onClick={() => {
-                    setSpinning(false);
-                    setLambda(v.lambda);
-                    setPhi(v.phi);
+                    setTargetView({ lambda: v.lambda, phi: v.phi, t: Date.now() });
                   }}
                 >
                   {v.label}
                 </Button>
               ))}
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">
+            <div className="mt-4 flex items-center gap-3 bg-muted/40 p-3 rounded-lg border border-border">
+              <span className="text-xs font-semibold text-muted-foreground w-8 text-right">1981</span>
+              <input
+                type="range"
+                min={1981}
+                max={new Date().getFullYear()}
+                value={currentYear}
+                onChange={(e) => setCurrentYear(Number(e.target.value))}
+                className="flex-1 h-2 bg-secondary rounded-full appearance-none cursor-pointer accent-accent"
+                aria-label="Filter stations by year"
+              />
+              <span className="text-xs font-bold text-foreground w-8">{currentYear}</span>
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">
               Drag or use arrow keys to rotate. Schematic orthographic projection — not for
               navigation.
             </p>
@@ -305,7 +479,17 @@ export function PolarGlobe() {
               Accessible fallback: station coordinates in a flat list, with a plate-carrée position
               grid. No WebGL or animation required.
             </p>
-            <svg viewBox="0 0 360 180" className="w-full rounded bg-primary/90" role="presentation">
+            <svg 
+              viewBox="0 0 360 180" 
+              className="w-full touch-none rounded bg-primary/90 overflow-hidden cursor-grab active:cursor-grabbing" 
+              role="presentation" 
+              ref={wheelRef}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
+            >
+              <g style={{ transform: `scale(${zoom}) translate(${mapPan.x}px, ${mapPan.y}px)`, transformOrigin: '180px 90px', transition: 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)' }}>
               {[-60, -30, 0, 30, 60].map((lat) => (
                 <line
                   key={lat}
@@ -328,18 +512,95 @@ export function PolarGlobe() {
                   strokeOpacity={0.25}
                 />
               ))}
-              {stations.map((s) => (
-                <circle
-                  key={s.id}
-                  cx={180 + s.lon}
-                  cy={90 - s.lat}
-                  r={selected === s.id ? 5 : 3.5}
-                  fill={selected === s.id ? "var(--color-accent)" : "var(--color-ice)"}
-                  className="cursor-pointer"
-                  onClick={() => setSelected(s.id)}
-                />
+              {visibleStations.map((s) => (
+                <g key={s.id}>
+                  <polyline
+                    points={`${180 + HQ.lon},${90 - HQ.lat} ${180 + s.lon},${90 - s.lat}`}
+                    fill="none"
+                    stroke="var(--color-accent)"
+                    strokeOpacity={0.9}
+                    strokeWidth={1.8}
+                    strokeDasharray="4 4"
+                    className="route-line pointer-events-none"
+                    filter="url(#glow)"
+                  />
+                  <circle
+                    cx={180 + s.lon}
+                    cy={90 - s.lat}
+                    r={selected === s.id ? 5 : 3.5}
+                    strokeWidth={1.5}
+                    className={cn(
+                      "cursor-pointer transition-all duration-200",
+                      selected === s.id
+                        ? "fill-[var(--color-accent)] stroke-foreground"
+                        : "fill-[var(--color-ice)] stroke-[var(--color-primary)] hover:fill-[var(--color-accent)] hover:stroke-foreground"
+                    )}
+                    onClick={() => handleSelect(s.id)}
+                    onPointerEnter={() => setHovered(s.id)}
+                    onPointerLeave={() => setHovered(null)}
+                  />
+                  <text
+                    x={180 + s.lon + 11}
+                    y={90 - s.lat + 4}
+                    fill="var(--color-foreground)"
+                    fontSize="10"
+                    fontWeight="500"
+                    className="pointer-events-none select-none drop-shadow-md"
+                  >
+                    {s.name}
+                  </text>
+                  {hovered === s.id && (
+                    <g className="pointer-events-none transition-opacity">
+                      <rect x={180 + s.lon + 8} y={90 - s.lat - 32} width="115" height="38" rx="4" fill="var(--color-card)" stroke="var(--color-border)" strokeWidth="1" opacity="0.95" />
+                      <text x={180 + s.lon + 15} y={90 - s.lat - 18} fill="var(--color-foreground)" fontSize="11" fontWeight="bold">{s.name}</text>
+                      <text x={180 + s.lon + 15} y={90 - s.lat - 4} fill="var(--color-accent)" fontSize="10" fontWeight="500">{getMockWeather(s.name)}</text>
+                    </g>
+                  )}
+                </g>
               ))}
+              <g key="hq-map">
+                <circle
+                  cx={180 + HQ.lon}
+                  cy={90 - HQ.lat}
+                  r={selected === "hq" ? 5 : 4}
+                  className="fill-amber-500 cursor-pointer stroke-[var(--color-card)] hover:brightness-110"
+                  onClick={() => handleSelect("hq")}
+                  onPointerEnter={() => setHovered("hq")}
+                  onPointerLeave={() => setHovered(null)}
+                />
+                <text
+                  x={180 + HQ.lon + 11}
+                  y={90 - HQ.lat + 4}
+                  fill="var(--color-foreground)"
+                  fontSize="10"
+                  fontWeight="500"
+                  className="pointer-events-none select-none drop-shadow-md"
+                >
+                  {HQ.name}
+                </text>
+                {hovered === "hq" && (
+                  <g className="pointer-events-none transition-opacity">
+                    <rect x={180 + HQ.lon + 8} y={90 - HQ.lat - 32} width="115" height="38" rx="4" fill="var(--color-card)" stroke="var(--color-border)" strokeWidth="1" opacity="0.95" />
+                    <text x={180 + HQ.lon + 15} y={90 - HQ.lat - 18} fill="var(--color-foreground)" fontSize="11" fontWeight="bold">{HQ.name}</text>
+                    <text x={180 + HQ.lon + 15} y={90 - HQ.lat - 4} fill="var(--color-accent)" fontSize="10" fontWeight="500">{getMockWeather(HQ.name)}</text>
+                  </g>
+                )}
+              </g>
+              </g>
             </svg>
+            <div className="mt-4 flex items-center gap-3 bg-muted/40 p-3 rounded-lg border border-border">
+              <span className="text-xs font-semibold text-muted-foreground w-8 text-right">1981</span>
+              <input
+                type="range"
+                min={1981}
+                max={new Date().getFullYear()}
+                value={currentYear}
+                onChange={(e) => setCurrentYear(Number(e.target.value))}
+                className="flex-1 h-2 bg-secondary rounded-full appearance-none cursor-pointer accent-accent"
+                aria-label="Filter stations by year"
+              />
+              <span className="text-xs font-bold text-foreground w-8">{currentYear}</span>
+            </div>
           </div>
         )}
       </div>
@@ -349,7 +610,7 @@ export function PolarGlobe() {
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="font-display text-xl font-semibold">{active.name}</h3>
             <Badge variant="secondary">{active.region}</Badge>
-            {active.established ? <Badge variant="outline">Since {active.established}</Badge> : null}
+            {active.established ? <Badge variant="outline">{active.established} - {new Date().getFullYear()}</Badge> : null}
           </div>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{active.description}</p>
           <dl className="mt-4 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
@@ -375,7 +636,7 @@ export function PolarGlobe() {
             <li key={s.id}>
               <button
                 type="button"
-                onClick={() => setSelected(s.id)}
+                onClick={() => handleSelect(s.id)}
                 aria-pressed={selected === s.id}
                 className={cn(
                   "w-full rounded-lg border p-3 text-left text-sm transition-colors",

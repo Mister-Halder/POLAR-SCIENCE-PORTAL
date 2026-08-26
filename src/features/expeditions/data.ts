@@ -169,6 +169,16 @@ export const expeditions: Expedition[] = [
 
 export const stations = [
   {
+    id: "dakshin",
+    name: "Dakshin Gangotri",
+    region: "Antarctic" as ExpeditionRegion,
+    lat: -70.08,
+    lon: 12.0,
+    established: 1983,
+    capacity: 0,
+    description: "India's first scientific base station in Antarctica. It was decommissioned in 1990 after being buried in ice, marking the beginning of India's polar journey.",
+  },
+  {
     id: "maitri",
     name: "Maitri",
     region: "Antarctic" as ExpeditionRegion,
