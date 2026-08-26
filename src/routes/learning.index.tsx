@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Clock, GraduationCap, ListChecks } from "lucide-react";
+import { Clock, GraduationCap, ListChecks, Sparkles } from "lucide-react";
 
 import { PageHero, PublicShell } from "@/components/site/public-shell";
 import { Badge } from "@/components/ui/badge";
@@ -71,14 +71,41 @@ function LearningIndex() {
           ))}
         </ul>
 
-        <div className="mt-12 rounded-xl border border-border bg-muted/40 p-6">
-          <h2 className="font-display text-xl font-bold">For teachers</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            Modules map to senior-secondary geography and environmental science syllabi. Figures and
-            data referenced in each lesson resolve to a citable dataset in the repository, so
-            students can work with the same measurements the scientists used. Quizzes run entirely in
-            the browser and record no personal data.
-          </p>
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <div className="rounded-xl border border-border bg-muted/40 p-6 flex flex-col justify-between">
+            <div>
+              <h2 className="font-display text-xl font-bold">For teachers & educators</h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Modules map to senior-secondary geography and environmental science syllabi. Figures and
+                data referenced in each lesson resolve to a citable dataset in the repository, so
+                students can work with the same measurements the scientists used. Quizzes run entirely in
+                the browser and record no personal data.
+              </p>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-accent/40 bg-accent/5 p-6 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Badge className="bg-accent text-accent-foreground text-xs">
+                  <Sparkles className="size-3 mr-1" />
+                  AI Tool
+                </Badge>
+                <h2 className="font-display text-xl font-bold">Polar Science Simplifier</h2>
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Have a complex research paper or expedition log you want to use in class? Use our AI Content Generator to automatically turn dense scientific reports into high-school accessible explanations, key takeaways, and social summaries.
+              </p>
+            </div>
+            <div className="mt-4">
+              <Button asChild size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                <Link to="/simplifier">
+                  Launch Science Simplifier
+                  <Sparkles className="ml-1.5 size-3.5" />
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
     </PublicShell>

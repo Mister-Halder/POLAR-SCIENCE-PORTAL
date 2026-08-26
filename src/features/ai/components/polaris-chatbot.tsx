@@ -125,8 +125,9 @@ export function PolarisChatbot() {
   useEffect(() => {
     const handleOpenEvent = (e: any) => {
       setIsOpen(true);
-      if (e?.detail?.query) {
-        handleSendMessage(e.detail.query);
+      const q = e?.detail?.query || e?.detail?.initialPrompt || e?.detail?.prompt;
+      if (q) {
+        handleSendMessage(q);
       }
     };
     window.addEventListener("open-polaris-ai", handleOpenEvent);

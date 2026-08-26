@@ -35,3 +35,57 @@ export interface TopicCategory {
   icon: string;
   prompts: string[];
 }
+
+export type SimplifierAudience = "high-school" | "general-public" | "policy-makers" | "classroom" | "media-press";
+
+export type SimplifierDomain =
+  | "antarctica"
+  | "arctic"
+  | "southern-ocean"
+  | "himalayas"
+  | "atmosphere"
+  | "biology"
+  | "glaciology"
+  | "geology"
+  | "policy";
+
+export interface GlossaryTerm {
+  term: string;
+  explanation: string;
+  category?: string;
+}
+
+export interface SimplifiedContent {
+  id: string;
+  title: string;
+  simpleWords: string;
+  keyTakeaways: string[];
+  whyItMatters: string;
+  socialPost: string;
+  hashtags: string[];
+  glossary?: GlossaryTerm[];
+  rawText: string;
+  sourceType?: string;
+  sourceTitle?: string;
+  domain?: SimplifierDomain;
+  audience: SimplifierAudience;
+  createdAt: number;
+}
+
+export interface SimplifierPreset {
+  id: string;
+  title: string;
+  domain: SimplifierDomain;
+  tag: string;
+  sourceType: "Research Paper" | "Expedition Report" | "Dataset Abstract" | "Field Notes" | "Policy Brief";
+  scientificInput: string;
+  sourceRef?: string;
+}
+
+export interface SimplifierOptions {
+  audience?: SimplifierAudience;
+  domain?: SimplifierDomain;
+  customFocus?: string;
+  sourceTitle?: string;
+  sourceType?: string;
+}

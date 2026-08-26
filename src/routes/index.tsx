@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Database, GraduationCap, Images, Ship } from "lucide-react";
+import { ArrowRight, Database, GraduationCap, Images, Ship, Sparkles } from "lucide-react";
 
 import { PublicShell } from "@/components/site/public-shell";
 import { PolarGlobe } from "@/components/globe/polar-globe";
@@ -89,7 +89,7 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {[
             {
               to: "/expeditions" as const,
@@ -104,6 +104,13 @@ function Home() {
               body: "Faceted search across themes, regions and dates with DOI-cited downloads.",
             },
             {
+              to: "/simplifier" as const,
+              icon: Sparkles,
+              title: "AI Simplifier",
+              body: "Transform complex research papers and expedition logs into accessible outreach.",
+              badge: "New",
+            },
+            {
               to: "/learning" as const,
               icon: GraduationCap,
               title: "Learning modules",
@@ -116,9 +123,16 @@ function Home() {
               body: "Field photography, video, hydrophone audio and official expedition reports.",
             },
           ].map((c) => (
-            <Card key={c.title} className="transition-shadow hover:shadow-md">
+            <Card key={c.title} className="transition-shadow hover:shadow-md relative overflow-hidden flex flex-col justify-between">
               <CardHeader>
-                <c.icon className="size-6 text-accent" aria-hidden />
+                <div className="flex items-center justify-between">
+                  <c.icon className="size-6 text-accent" aria-hidden />
+                  {"badge" in c && (
+                    <Badge className="bg-accent text-accent-foreground text-[10px] py-0">
+                      {c.badge}
+                    </Badge>
+                  )}
+                </div>
                 <CardTitle className="mt-2 text-lg">{c.title}</CardTitle>
                 <CardDescription>{c.body}</CardDescription>
               </CardHeader>
