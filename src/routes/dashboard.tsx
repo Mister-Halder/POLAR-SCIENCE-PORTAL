@@ -39,21 +39,21 @@ const submissions = [
     title: "Bharati snow-pit density and stratigraphy, 2025-26",
     state: "in review",
     updated: "2026-08-14",
-    curator: "Rukmini Das",
+    curator: "Ashmita Roy Karmakar",
   },
   {
     id: "sub-2026-033",
     title: "Kongsfjorden mesozooplankton net hauls, summer 2025",
     state: "changes requested",
     updated: "2026-08-02",
-    curator: "Rukmini Das",
+    curator: "Ashmita Roy Karmakar",
   },
   {
     id: "sub-2026-018",
     title: "Firn core PC-44/03 stable isotope and black carbon stratigraphy",
     state: "published",
     updated: "2025-07-02",
-    curator: "Rukmini Das",
+    curator: "Ashmita Roy Karmakar",
   },
 ];
 
