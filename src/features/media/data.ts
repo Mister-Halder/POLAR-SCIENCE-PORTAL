@@ -34,7 +34,7 @@ export const mediaItems: MediaItem[] = [
     id: "md-002",
     kind: "photo",
     title: "Firn core section PC-44/03 under raking light",
-    credit: "Photo: Dr. Anirban Sen / NCPOR",
+    credit: "Photo: Debashis Halder / NCPOR",
     captured: "2025-01-11",
     location: "Sør Rondane foothills, Antarctica",
     expeditionCode: "ISEA-44",

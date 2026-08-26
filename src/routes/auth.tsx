@@ -42,6 +42,74 @@ function AuthPage() {
     void navigate({ to: session.role === "admin" ? "/admin" : "/dashboard" });
   }
 
+  function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setPending(true);
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+
+    setTimeout(() => {
+      try {
+        const users = JSON.parse(localStorage.getItem("mock_users") || "[]");
+        const found = users.find((u: any) => u.email === email && u.password === password);
+        
+        if (found) {
+          signIn({ id: found.id, name: found.name, role: found.role });
+          toast.success(`Welcome back, ${found.name}!`);
+          void navigate({ to: "/dashboard" });
+        } else {
+          toast.error("Invalid email or password.", { description: "Please check your credentials or register a new account." });
+        }
+      } catch (err) {
+        toast.error("Authentication failed.");
+      }
+      setPending(false);
+    }, 500);
+  }
+
+  function handleRegister(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setPending(true);
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem("rname") as HTMLInputElement).value;
+    const email = (form.elements.namedItem("remail") as HTMLInputElement).value;
+    const institution = (form.elements.namedItem("rinst") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("rpassword") as HTMLInputElement).value;
+
+    setTimeout(() => {
+      try {
+        const users = JSON.parse(localStorage.getItem("mock_users") || "[]");
+        if (users.find((u: any) => u.email === email)) {
+          toast.error("An account with this email already exists.");
+          setPending(false);
+          return;
+        }
+
+        const newUser = {
+          id: `usr_${Date.now()}`,
+          name,
+          email,
+          institution,
+          password,
+          role: "researcher"
+        };
+        
+        users.push(newUser);
+        localStorage.setItem("mock_users", JSON.stringify(users));
+        
+        signIn({ id: newUser.id, name: newUser.name, role: newUser.role as any });
+        toast.success("Registration successful!", {
+          description: "Your account has been created and you are now signed in.",
+        });
+        void navigate({ to: "/dashboard" });
+      } catch (err) {
+        toast.error("Registration failed.");
+      }
+      setPending(false);
+    }, 500);
+  }
+
   return (
     <PublicShell>
       <section className="mx-auto grid max-w-6xl gap-10 px-4 py-16 lg:grid-cols-2">
@@ -61,15 +129,7 @@ function AuthPage() {
             <TabsContent value="signin" className="mt-6">
               <form
                 className="space-y-4 rounded-xl border border-border bg-card p-6"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setPending(true);
-                  toast.info("Credential sign-in requires the API", {
-                    description:
-                      "Attach the Express auth service (POLAR_API_URL) to exchange credentials for a JWT. Use a demo role below to explore the UI.",
-                  });
-                  setPending(false);
-                }}
+                onSubmit={handleSignIn}
               >
                 <div>
                   <Label htmlFor="email">Institutional email</Label>
@@ -105,12 +165,7 @@ function AuthPage() {
             <TabsContent value="register" className="mt-6">
               <form
                 className="space-y-4 rounded-xl border border-border bg-card p-6"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  toast.success("Registration request recorded (demo)", {
-                    description: "A curator verifies institutional affiliation before activation.",
-                  });
-                }}
+                onSubmit={handleRegister}
               >
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
@@ -126,11 +181,15 @@ function AuthPage() {
                     <Input id="rinst" required className="mt-1.5" />
                   </div>
                   <div>
+                    <Label htmlFor="rpassword">Password</Label>
+                    <Input id="rpassword" type="password" required className="mt-1.5" />
+                  </div>
+                  <div>
                     <Label htmlFor="orcid">ORCID (optional)</Label>
                     <Input id="orcid" className="mt-1.5" placeholder="0000-0000-0000-0000" />
                   </div>
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={pending}>
                   Request an account
                 </Button>
               </form>

@@ -58,7 +58,7 @@ export const expeditions: Expedition[] = [
     datasetIds: ["ds-maitri-awx-2024", "ds-firn-core-pc4403", "ds-gnss-bedrock-uplift"],
     team: [
       { name: "Dr. Meenakshi Rawat", role: "Expedition Leader", institution: "NCPOR, Goa" },
-      { name: "Dr. Anirban Sen", role: "Glaciology Lead", institution: "NCPOR, Goa" },
+      { name: "Debashis Halder", role: "Glaciology Lead", institution: "NCPOR, Goa" },
       {
         name: "Dr. Kavya Iyer",
         role: "Atmospheric Sciences",

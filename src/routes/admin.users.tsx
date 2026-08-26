@@ -39,7 +39,7 @@ interface PortalUser {
 const seed: PortalUser[] = [
   {
     id: "u-1041",
-    name: "Dr. Anirban Sen",
+    name: "Debashis Halder",
     email: "a.sen@ncpor.res.in",
     institution: "NCPOR, Goa",
     role: "researcher",
@@ -47,7 +47,7 @@ const seed: PortalUser[] = [
   },
   {
     id: "u-1042",
-    name: "Rukmini Das",
+    name: "Ashmita Roy Karmakar",
     email: "r.das@ncpor.res.in",
     institution: "NCPOR Data Centre",
     role: "curator",
