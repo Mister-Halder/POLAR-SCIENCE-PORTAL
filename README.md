@@ -11,7 +11,6 @@
 [![Vite](https://img.shields.io/badge/Vite-5-purple?logo=vite)](https://vitejs.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-[![Gemini](https://img.shields.io/badge/AI-Gemini_3.6_Flash-orange?logo=google)](https://deepmind.google/technologies/gemini/)
 
 </div>
 
