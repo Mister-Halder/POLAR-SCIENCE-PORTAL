@@ -39,7 +39,7 @@ const INITIAL_GREETING: ChatMessage = {
   id: "greeting-1",
   role: "assistant",
   content: `### 🧊 Welcome to Polaris AI!
-I am your interactive scientific guide for the **India Polar Science Portal**, operated by the **National Centre for Polar and Ocean Research (NCPOR)** under the **Ministry of Earth Sciences (MoES)**.
+I am your interactive scientific guide for the **India PolaRis**, operated by the **National Centre for Polar and Ocean Research (NCPOR)** under the **Ministry of Earth Sciences (MoES)**.
 
 Here is what I can help you with:
 - 🏔️ **Research Stations**: Details, history, and live roles of **Maitri**, **Bharati**, **Himadri (Arctic)**, and **HIMANSH (Himalayas)**.
@@ -367,7 +367,7 @@ export function PolarisChatbot() {
                   </Badge>
                 </div>
                 <p className="text-[11px] text-muted-foreground">
-                  India Polar Science Portal Assistant
+                  India PolaRis Assistant
                 </p>
               </div>
             </div>

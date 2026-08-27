@@ -1,4 +1,4 @@
--- India Polar Science Portal — Postgres schema (migration 0001).
+-- India PolaRis — Postgres schema (migration 0001).
 -- Roles live in a dedicated table, never on the user profile, to prevent
 -- privilege escalation through profile writes.
 

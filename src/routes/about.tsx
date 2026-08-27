@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { publications, site, timeline } from "@/features/site/content";
 import { stations } from "@/features/expeditions/data";
 
-const title = "About the programme | India Polar Science Portal";
+const title = "About the programme | India PolaRis";
 const description =
   "History, mandate, stations and governance of India's polar research programme under the Ministry of Earth Sciences, from the 1981 first expedition to the Indian Antarctic Act 2022.";
 

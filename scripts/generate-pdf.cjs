@@ -10,7 +10,7 @@ doc.fontSize(14).text('Captured: 2025-05-30', 100, 160);
 doc.fontSize(14).text('Expedition: ISEA-44', 100, 180);
 
 doc.moveDown();
-doc.fontSize(12).text('This is a dynamically generated placeholder document containing 84 pages for the Polar Science Portal demo.');
+doc.fontSize(12).text('This is a dynamically generated placeholder document containing 84 pages for the PolaRis demo.');
 
 for (let i = 2; i <= 84; i++) {
   doc.addPage();

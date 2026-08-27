@@ -91,7 +91,7 @@ export function SiteHeader() {
             </span>
             <span className="leading-tight">
               <span className="block font-display text-base font-semibold sm:text-lg">
-                Polar Science Portal
+                PolaRis
               </span>
               <span className="hidden text-xs text-muted-foreground sm:block">
                 Antarctic · Arctic · Southern Ocean · Himalaya

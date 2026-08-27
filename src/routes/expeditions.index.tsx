@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { expeditions, type ExpeditionRegion } from "@/features/expeditions/data";
 
-const title = "Expeditions | India Polar Science Portal";
+const title = "Expeditions | India PolaRis";
 const description =
   "Browse Indian Antarctic, Arctic, Southern Ocean and Himalayan expeditions with objectives, teams, field highlights and the datasets each campaign produced.";
 

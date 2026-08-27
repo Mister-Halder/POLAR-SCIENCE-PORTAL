@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { modules } from "@/features/learning/data";
 
-const title = "Learning modules | India Polar Science Portal";
+const title = "Learning modules | India PolaRis";
 const description =
   "Free polar science learning modules with quizzes — from why India studies the poles to reading ice cores and Southern Ocean carbon accounting.";
 

@@ -23,7 +23,7 @@ import {
   type DatasetQuery,
 } from "@/features/repository/data";
 
-const title = "Data repository | India Polar Science Portal";
+const title = "Data repository | India PolaRis";
 const description =
   "Faceted search across curated Indian polar datasets — glaciology, atmospheric science, oceanography, biology and geophysics — with DOIs, licences and download manifests.";
 

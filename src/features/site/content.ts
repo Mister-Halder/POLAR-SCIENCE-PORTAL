@@ -1,5 +1,5 @@
 export const site = {
-  name: "India Polar Science Portal",
+  name: "PolaRis",
   ministry: "Ministry of Earth Sciences, Government of India",
   operator: "National Centre for Polar and Ocean Research (NCPOR), Goa",
   tagline: "India's open window on the Antarctic, the Arctic, the Southern Ocean and the third pole",
@@ -66,7 +66,7 @@ export const timeline = [
   { year: "2014", event: "IndARC sub-surface mooring deployed in Kongsfjorden." },
   { year: "2016", event: "HIMANSH high-altitude station established in Spiti Valley for Himalayan cryosphere work." },
   { year: "2022", event: "The Indian Antarctic Act comes into force, codifying Treaty obligations in domestic law." },
-  { year: "2025", event: "Polar Science Portal launched as the single open access point for expedition data and outreach." },
+  { year: "2025", event: "PolaRis launched as the single open access point for expedition data and outreach." },
 ];
 
 export const publications = [

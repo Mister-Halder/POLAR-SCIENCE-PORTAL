@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { demoAccounts } from "@/features/auth/session";
 import { useSession } from "@/features/auth/useSession";
 
-const title = "Sign in | India Polar Science Portal";
+const title = "Sign in | India PolaRis";
 const description =
   "Sign in to submit datasets, request restricted polar data and track review status, or register for a verified researcher account.";
 

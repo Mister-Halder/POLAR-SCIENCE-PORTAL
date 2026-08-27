@@ -19,7 +19,7 @@ export const Route = createFileRoute("/expeditions/$slug")({
       };
     }
     const { expedition } = loaderData;
-    const t = `${expedition.title} | India Polar Science Portal`;
+    const t = `${expedition.title} | India PolaRis`;
     return {
       meta: [
         { title: t },

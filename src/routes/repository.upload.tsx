@@ -21,7 +21,7 @@ import { accessLevels, themes } from "@/features/repository/data";
 import { expeditions } from "@/features/expeditions/data";
 import { useSession } from "@/features/auth/useSession";
 
-const title = "Submit a dataset | India Polar Science Portal";
+const title = "Submit a dataset | India PolaRis";
 const description =
   "Register metadata and upload data files for an Indian polar expedition dataset, with checksum verification, licence selection and curator review.";
 

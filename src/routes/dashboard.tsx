@@ -16,9 +16,9 @@ import { rolePermissions } from "@/features/auth/session";
 import { useSession } from "@/features/auth/useSession";
 import { datasets } from "@/features/repository/data";
 
-const title = "My dashboard | India Polar Science Portal";
+const title = "My dashboard | India PolaRis";
 const description =
-  "Track your dataset submissions, review status, download history and restricted-data access requests on the India Polar Science Portal.";
+  "Track your dataset submissions, review status, download history and restricted-data access requests on the India PolaRis.";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({

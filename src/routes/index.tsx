@@ -11,7 +11,7 @@ import { datasets } from "@/features/repository/data";
 import { modules } from "@/features/learning/data";
 import { headlineStats, notices, researchThemes, site } from "@/features/site/content";
 
-const title = "India Polar Science Portal | Ministry of Earth Sciences";
+const title = "PolaRis | Ministry of Earth Sciences";
 const description =
   "Open expedition records, curated datasets, learning modules and media from India's Antarctic, Arctic, Southern Ocean and Himalayan research programme.";
 

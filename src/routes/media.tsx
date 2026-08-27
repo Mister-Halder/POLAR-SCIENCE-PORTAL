@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { mediaItems, mediaKinds, type MediaItem } from "@/features/media/data";
 
-const title = "Media library | India Polar Science Portal";
+const title = "Media library | India PolaRis";
 const description =
   "Field photography, video, hydrophone audio and official reports from Indian Antarctic, Arctic and Himalayan expeditions, with credits and reuse licences.";
 

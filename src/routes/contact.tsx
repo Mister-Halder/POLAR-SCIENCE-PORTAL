@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-const title = "Contact the polar data centre | India Polar Science Portal";
+const title = "Contact the polar data centre | India PolaRis";
 const description =
   "Reach the NCPOR data centre, media desk and expedition office for data queries, collaboration proposals, media requests and access requests.";
 

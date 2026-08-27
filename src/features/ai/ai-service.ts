@@ -6,7 +6,7 @@ import { site, headlineStats, notices, publications, timeline } from "@/features
 import type { ActionCard, ChatMessage } from "./types";
 
 const SYSTEM_GROUNDING_PROMPT = `
-You are Polaris AI, an intelligent, authoritative, and inspiring AI science assistant for the India Polar Science Portal, operated by the National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences (MoES), Government of India.
+You are Polaris AI, an intelligent, authoritative, and inspiring AI science assistant for the India PolaRis, operated by the National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences (MoES), Government of India.
 
 Your capabilities:
 1. You can answer ANY question on Polar Science, Earth & Planetary Climate, Cryosphere, Oceanography, Atmospheric Physics, Glaciology, Paleoclimatology, Space Weather, Polar Biology & Wildlife, Geopolitics, and History with rigorous scientific accuracy, clarity, and depth.
@@ -60,7 +60,7 @@ export class PolarAIService {
           return {
             content: geminiResult,
             actions: matchedActions,
-            citations: ["Google Gemini 2.5 Flash", "MoES / NCPOR India Polar Science Portal"],
+            citations: ["Google Gemini 2.5 Flash", "MoES / NCPOR India PolaRis"],
             suggestedQuestions: followUps,
           };
         }

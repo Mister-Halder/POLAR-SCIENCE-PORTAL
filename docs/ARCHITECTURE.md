@@ -1,4 +1,4 @@
-# India Polar Science Portal — architecture and setup
+# India PolaRis — architecture and setup
 
 ## Shape of the system
 

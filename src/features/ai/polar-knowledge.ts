@@ -73,7 +73,7 @@ export const TOPIC_CATEGORIES: TopicCategory[] = [
       "Explain the Indian Antarctic Act 2022",
       "What is the Antarctic Treaty System and Madrid Protocol?",
       "Can tourists visit Antarctica legally?",
-      "Who operates the Polar Science Portal?",
+      "Who operates the PolaRis?",
     ],
   },
 ];

@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🧊 Polar Science Portal
+# 🧊 PolaRis
 
 ### A Unified Digital Ecosystem for India's Polar Science Outreach, Research & Media
 
@@ -19,7 +19,7 @@
 
 ## 🌍 Overview
 
-The **Polar Science Portal** connects India's polar science research, public outreach, and multimedia dissemination into a single accessible platform. It brings together India's expeditions to **Antarctica, the Arctic, and the Himalayas** — making cutting-edge climate and ecology research discoverable to researchers, students, educators, and the public.
+The **PolaRis** connects India's polar science research, public outreach, and multimedia dissemination into a single accessible platform. It brings together India's expeditions to **Antarctica, the Arctic, and the Himalayas** — making cutting-edge climate and ecology research discoverable to researchers, students, educators, and the public.
 
 ---
 

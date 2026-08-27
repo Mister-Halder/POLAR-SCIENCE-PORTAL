@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin console | India Polar Science Portal" },
+      { title: "Admin console | India PolaRis" },
       {
         name: "description",
         content:
