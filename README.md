@@ -267,6 +267,3 @@ This project is licensed under the **MIT License** — see the [LICENSE](./LICEN
 **Built for Smart India Hackathon 2026** · Ministry of Earth Sciences 🇮🇳
 
 </div>
-
-  
- 
