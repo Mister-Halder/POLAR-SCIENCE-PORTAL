@@ -1,6 +1,6 @@
 export interface MediaItem {
   id: string;
-  kind: "photo" | "video" | "audio" | "document";
+  kind: "photo";
   title: string;
   credit: string;
   captured: string;
@@ -13,6 +13,10 @@ export interface MediaItem {
   license: string;
   /** Deterministic gradient seed so the demo tile art is stable across SSR and hydration. */
   hue: number;
+  /** Optional URL to a real image for photos and video thumbnails */
+  imageUrl?: string;
+  /** Optional URL to download or view the actual asset (e.g. PDF document) */
+  downloadUrl?: string;
 }
 
 export const mediaItems: MediaItem[] = [
@@ -29,12 +33,13 @@ export const mediaItems: MediaItem[] = [
     tags: ["katabatic", "Maitri", "weather"],
     license: "CC BY 4.0",
     hue: 214,
+    imageUrl: "https://currentaffairs.adda247.com/wp-content/uploads/multisite/sites/5/2025/12/16164902/India-Plans-New-Antarctic-Station-Maitri-II-Completion-Target-2032.webp",
   },
   {
     id: "md-002",
     kind: "photo",
     title: "Firn core section PC-44/03 under raking light",
-    credit: "Photo: Dr. Anirban Sen / NCPOR",
+    credit: "Photo: Debashis Halder / NCPOR",
     captured: "2025-01-11",
     location: "Sør Rondane foothills, Antarctica",
     expeditionCode: "ISEA-44",
@@ -43,37 +48,9 @@ export const mediaItems: MediaItem[] = [
     tags: ["ice core", "glaciology", "stratigraphy"],
     license: "CC BY 4.0",
     hue: 198,
+    imageUrl: "https://th.bing.com/th/id/R.3feab85d1652da9643100c54be4a325a?rik=QmneN8%2fz7FVFjA&riu=http%3a%2f%2fgeo2.unibe.ch%2fwp%2fwp-content%2fuploads%2f2018%2f02%2fAntarctica04_NakiAkcar.jpg&ehk=o12LLW%2b95suavu7gxqW7ZbOEzrI5BL0OyY5CZVWA8w0%3d&risl=&pid=ImgRaw&r=0",
   },
-  {
-    id: "md-003",
-    kind: "video",
-    title: "Deploying the Kongsfjorden CTD rosette",
-    credit: "Video: IARC-2025 field team / NCPOR",
-    captured: "2025-06-27",
-    location: "Kongsfjorden, Svalbard",
-    expeditionCode: "IARC-2025",
-    description:
-      "Small-boat CTD deployment at inner-fjord station K3, showing the winch procedure and surface meltwater layer sampling near the Kronebreen calving front.",
-    tags: ["CTD", "Arctic", "fieldwork"],
-    durationSeconds: 214,
-    license: "CC BY-NC 4.0",
-    hue: 190,
-  },
-  {
-    id: "md-004",
-    kind: "audio",
-    title: "Glacier calving acoustics, Kronebreen front",
-    credit: "Recording: Dr. Sanjana Pillai / NCPOR",
-    captured: "2025-07-14",
-    location: "Kronebreen, Svalbard",
-    expeditionCode: "IARC-2025",
-    description:
-      "Hydrophone recording of submarine melt and calving events, captured 400 m from the terminus over a 12-minute window during peak melt.",
-    tags: ["acoustics", "calving", "hydrophone"],
-    durationSeconds: 726,
-    license: "CC BY 4.0",
-    hue: 172,
-  },
+
   {
     id: "md-005",
     kind: "photo",
@@ -87,22 +64,9 @@ export const mediaItems: MediaItem[] = [
     tags: ["mass balance", "Himalaya", "HIMANSH"],
     license: "CC BY 4.0",
     hue: 40,
+    imageUrl: "https://tse1.mm.bing.net/th/id/OIP.pCoRGWqvZS3K0J-65f0zwgHaE0?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
   },
-  {
-    id: "md-006",
-    kind: "document",
-    title: "ISEA-44 preliminary science report",
-    credit: "NCPOR, Ministry of Earth Sciences",
-    captured: "2025-05-30",
-    location: "Goa, India",
-    expeditionCode: "ISEA-44",
-    description:
-      "Preliminary cruise and station report summarising instrument deployments, sample inventories and data-submission status for the 44th Antarctic expedition.",
-    tags: ["report", "documentation", "ISEA-44"],
-    pages: 84,
-    license: "Government Open Data Licence — India",
-    hue: 228,
-  },
+
   {
     id: "md-007",
     kind: "photo",
@@ -116,22 +80,9 @@ export const mediaItems: MediaItem[] = [
     tags: ["aurora", "Bharati", "night sky"],
     license: "CC BY 4.0",
     hue: 158,
+    imageUrl: "https://thumbs.dreamstime.com/b/hill-icebergs-hill-icebergs-larsemann-hills-prydz-bay-antarctica-366490525.jpg",
   },
-  {
-    id: "md-008",
-    kind: "video",
-    title: "UAV photogrammetry flight lines, Sutri Dhaka",
-    credit: "Video: Dr. Aruna Devi / WIHG",
-    captured: "2024-09-15",
-    location: "Chandra basin, Himachal Pradesh",
-    expeditionCode: "HICRYO-2024",
-    description:
-      "Time-compressed footage of a mapping flight over the glacier tongue, annotated with ground control point positions used for the 0.15 m DEM.",
-    tags: ["UAV", "DEM", "survey"],
-    durationSeconds: 168,
-    license: "CC BY 4.0",
-    hue: 96,
-  },
+
   {
     id: "md-009",
     kind: "photo",
@@ -145,7 +96,24 @@ export const mediaItems: MediaItem[] = [
     tags: ["microbiology", "cryoconite", "Arctic"],
     license: "CC BY-NC 4.0",
     hue: 148,
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/08_Ny_Alesund_prn.JPG/500px-08_Ny_Alesund_prn.JPG",
   },
+  {
+    id: "md-010",
+    kind: "photo",
+    title: "Emperor Penguins near Dakshin Gangotri",
+    credit: "Photo: Dr. Sanjana Pillai / NCPOR",
+    captured: "2025-11-20",
+    location: "Princess Astrid Coast, Antarctica",
+    expeditionCode: "ISEA-45",
+    description: "A small colony of Emperor penguins observed during a coastal traverse near the historic Dakshin Gangotri station site.",
+    tags: ["wildlife", "penguins", "biology"],
+    license: "CC BY 4.0",
+    hue: 200,
+    imageUrl: "https://travelhost.com/.image/MjU6MDAwMDAwMDAwMTI3NTg0/princesscruises-antarctica-lead-ads-032426.jpg?profile=share16-9",
+  },
+
+
 ];
 
-export const mediaKinds = ["photo", "video", "audio", "document"] as const;
+export const mediaKinds = ["photo"] as const;

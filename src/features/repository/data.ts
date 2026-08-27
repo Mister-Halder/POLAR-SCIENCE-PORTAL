@@ -94,7 +94,7 @@ export const datasets: Dataset[] = [
     theme: "Glaciology",
     region: "Antarctic — Queen Maud Land",
     expeditionCode: "ISEA-44",
-    pi: "Dr. Anirban Sen",
+    pi: "Debashis Halder",
     institution: "NCPOR, Goa",
     published: "2025-07-02",
     temporalStart: "1815-01-01",

@@ -33,6 +33,38 @@ function AuthPage() {
   const { signIn, user } = useSession();
   const navigate = useNavigate();
   const [pending, setPending] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+
+  function handleForgotPassword(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setPending(true);
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem("resetEmail") as HTMLInputElement).value;
+    const newPassword = (form.elements.namedItem("newPassword") as HTMLInputElement).value;
+
+    setTimeout(() => {
+      try {
+        const users = JSON.parse(localStorage.getItem("mock_users") || "[]");
+        const userIndex = users.findIndex((u: any) => u.email === email);
+        
+        if (userIndex !== -1) {
+          users[userIndex].password = newPassword;
+          localStorage.setItem("mock_users", JSON.stringify(users));
+          toast.success("Password reset successfully!", {
+            description: "You can now sign in with your new password.",
+          });
+          setIsForgotPassword(false);
+        } else {
+          toast.error("No account found.", {
+            description: `We couldn't find an account associated with ${email}.`,
+          });
+        }
+      } catch (err) {
+        toast.error("An error occurred while resetting the password.");
+      }
+      setPending(false);
+    }, 500);
+  }
 
   function useDemoAccount(index: number) {
     const account = demoAccounts[index]!;
@@ -40,6 +72,74 @@ function AuthPage() {
     signIn(session);
     toast.success(`Signed in as ${session.name}`, { description: `Role: ${session.role}` });
     void navigate({ to: session.role === "admin" ? "/admin" : "/dashboard" });
+  }
+
+  function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setPending(true);
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+
+    setTimeout(() => {
+      try {
+        const users = JSON.parse(localStorage.getItem("mock_users") || "[]");
+        const found = users.find((u: any) => u.email === email && u.password === password);
+        
+        if (found) {
+          signIn({ id: found.id, name: found.name, role: found.role });
+          toast.success(`Welcome back, ${found.name}!`);
+          void navigate({ to: "/dashboard" });
+        } else {
+          toast.error("Invalid email or password.", { description: "Please check your credentials or register a new account." });
+        }
+      } catch (err) {
+        toast.error("Authentication failed.");
+      }
+      setPending(false);
+    }, 500);
+  }
+
+  function handleRegister(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setPending(true);
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem("rname") as HTMLInputElement).value;
+    const email = (form.elements.namedItem("remail") as HTMLInputElement).value;
+    const institution = (form.elements.namedItem("rinst") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("rpassword") as HTMLInputElement).value;
+
+    setTimeout(() => {
+      try {
+        const users = JSON.parse(localStorage.getItem("mock_users") || "[]");
+        if (users.find((u: any) => u.email === email)) {
+          toast.error("An account with this email already exists.");
+          setPending(false);
+          return;
+        }
+
+        const newUser = {
+          id: `usr_${Date.now()}`,
+          name,
+          email,
+          institution,
+          password,
+          role: "researcher"
+        };
+        
+        users.push(newUser);
+        localStorage.setItem("mock_users", JSON.stringify(users));
+        
+        signIn({ id: newUser.id, name: newUser.name, role: newUser.role as any });
+        toast.success("Registration successful!", {
+          description: "Your account has been created and you are now signed in.",
+        });
+        void navigate({ to: "/dashboard" });
+      } catch (err) {
+        toast.error("Registration failed.");
+      }
+      setPending(false);
+    }, 500);
   }
 
   return (
@@ -59,58 +159,93 @@ function AuthPage() {
               <TabsTrigger value="register">Register</TabsTrigger>
             </TabsList>
             <TabsContent value="signin" className="mt-6">
-              <form
-                className="space-y-4 rounded-xl border border-border bg-card p-6"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setPending(true);
-                  toast.info("Credential sign-in requires the API", {
-                    description:
-                      "Attach the Express auth service (POLAR_API_URL) to exchange credentials for a JWT. Use a demo role below to explore the UI.",
-                  });
-                  setPending(false);
-                }}
-              >
-                <div>
-                  <Label htmlFor="email">Institutional email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="mt-1.5"
-                    placeholder="name@institution.res.in"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    className="mt-1.5"
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={pending}>
-                  <KeyRound className="mr-2 size-4" aria-hidden />
-                  Sign in
-                </Button>
-                <p className="text-xs text-muted-foreground">
-                  Sessions use a 15-minute JWT access token and a rotating refresh cookie with
-                  reuse detection. No credentials are stored in the browser.
-                </p>
-              </form>
+              {isForgotPassword ? (
+                <form
+                  className="space-y-4 rounded-xl border border-border bg-card p-6"
+                  onSubmit={handleForgotPassword}
+                >
+                  <div>
+                    <h3 className="font-semibold text-lg">Reset your password</h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Enter your institutional email and your new password to update your credentials.
+                    </p>
+                  </div>
+                  <div>
+                    <Label htmlFor="resetEmail">Institutional email</Label>
+                    <Input
+                      id="resetEmail"
+                      type="email"
+                      required
+                      className="mt-1.5"
+                      placeholder="name@institution.res.in"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="newPassword">New Password</Label>
+                    <Input
+                      id="newPassword"
+                      type="password"
+                      required
+                      className="mt-1.5"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={pending}>
+                    Reset Password
+                  </Button>
+                  <Button type="button" variant="ghost" className="w-full" onClick={() => setIsForgotPassword(false)}>
+                    Back to sign in
+                  </Button>
+                </form>
+              ) : (
+                <form
+                  className="space-y-4 rounded-xl border border-border bg-card p-6"
+                  onSubmit={handleSignIn}
+                >
+                  <div>
+                    <Label htmlFor="email">Institutional email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      className="mt-1.5"
+                      placeholder="name@institution.res.in"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="password">Password</Label>
+                      <button
+                        type="button"
+                        onClick={() => setIsForgotPassword(true)}
+                        className="text-xs text-accent hover:underline"
+                      >
+                        Forgot password?
+                      </button>
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      autoComplete="current-password"
+                      required
+                      className="mt-1.5"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={pending}>
+                    <KeyRound className="mr-2 size-4" aria-hidden />
+                    Sign in
+                  </Button>
+                  <p className="text-xs text-muted-foreground">
+                    Sessions use a 15-minute JWT access token and a rotating refresh cookie with
+                    reuse detection. No credentials are stored in the browser.
+                  </p>
+                </form>
+              )}
             </TabsContent>
             <TabsContent value="register" className="mt-6">
               <form
                 className="space-y-4 rounded-xl border border-border bg-card p-6"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  toast.success("Registration request recorded (demo)", {
-                    description: "A curator verifies institutional affiliation before activation.",
-                  });
-                }}
+                onSubmit={handleRegister}
               >
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
@@ -126,11 +261,15 @@ function AuthPage() {
                     <Input id="rinst" required className="mt-1.5" />
                   </div>
                   <div>
+                    <Label htmlFor="rpassword">Password</Label>
+                    <Input id="rpassword" type="password" required className="mt-1.5" />
+                  </div>
+                  <div>
                     <Label htmlFor="orcid">ORCID (optional)</Label>
                     <Input id="orcid" className="mt-1.5" placeholder="0000-0000-0000-0000" />
                   </div>
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={pending}>
                   Request an account
                 </Button>
               </form>

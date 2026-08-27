@@ -33,7 +33,7 @@ const initial: Submission[] = [
   {
     id: "sub-2026-041",
     title: "Bharati snow-pit density and stratigraphy, 2025-26",
-    pi: "Dr. Anirban Sen",
+    pi: "Debashis Halder",
     theme: "Glaciology",
     submitted: "2026-08-14",
     files: 4,

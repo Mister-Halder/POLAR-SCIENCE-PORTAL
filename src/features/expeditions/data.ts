@@ -58,7 +58,7 @@ export const expeditions: Expedition[] = [
     datasetIds: ["ds-maitri-awx-2024", "ds-firn-core-pc4403", "ds-gnss-bedrock-uplift"],
     team: [
       { name: "Dr. Meenakshi Rawat", role: "Expedition Leader", institution: "NCPOR, Goa" },
-      { name: "Dr. Anirban Sen", role: "Glaciology Lead", institution: "NCPOR, Goa" },
+      { name: "Debashis Halder", role: "Glaciology Lead", institution: "NCPOR, Goa" },
       {
         name: "Dr. Kavya Iyer",
         role: "Atmospheric Sciences",
@@ -168,6 +168,16 @@ export const expeditions: Expedition[] = [
 ];
 
 export const stations = [
+  {
+    id: "dakshin",
+    name: "Dakshin Gangotri",
+    region: "Antarctic" as ExpeditionRegion,
+    lat: -70.08,
+    lon: 12.0,
+    established: 1983,
+    capacity: 0,
+    description: "India's first scientific base station in Antarctica. It was decommissioned in 1990 after being buried in ice, marking the beginning of India's polar journey.",
+  },
   {
     id: "maitri",
     name: "Maitri",

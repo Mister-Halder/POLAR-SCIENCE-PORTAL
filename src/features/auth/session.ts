@@ -24,7 +24,7 @@ const STORAGE_KEY = "moes-polar-demo-session";
 export const demoAccounts: (SessionUser & { hint: string })[] = [
   {
     id: "u-researcher",
-    name: "Dr. Anirban Sen",
+    name: "Debashis Halder",
     email: "a.sen@ncpor.res.in",
     role: "researcher",
     institution: "NCPOR, Goa",
@@ -33,7 +33,7 @@ export const demoAccounts: (SessionUser & { hint: string })[] = [
   },
   {
     id: "u-curator",
-    name: "Rukmini Das",
+    name: "Ashmita Roy Karmakar",
     email: "r.das@ncpor.res.in",
     role: "curator",
     institution: "NCPOR Data Centre",

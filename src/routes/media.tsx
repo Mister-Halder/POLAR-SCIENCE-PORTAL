@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { FileText, Headphones, Image as ImageIcon, Video } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
 import { useState } from "react";
 
 import { PageHero, PublicShell } from "@/components/site/public-shell";
@@ -32,9 +32,6 @@ export const Route = createFileRoute("/media")({
 
 const kindIcon = {
   photo: ImageIcon,
-  video: Video,
-  audio: Headphones,
-  document: FileText,
 } as const;
 
 function formatDuration(seconds: number) {
@@ -44,6 +41,19 @@ function formatDuration(seconds: number) {
 }
 
 function TileArt({ item }: { item: MediaItem }) {
+  if (item.imageUrl) {
+    return (
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-muted">
+        <img
+          src={item.imageUrl}
+          alt={item.title}
+          className="size-full object-cover"
+          loading="lazy"
+        />
+      </div>
+    );
+  }
+
   // Deterministic generated artwork stands in for the asset thumbnail until the
   // media CDN is attached, keeping SSR and hydration output identical.
   return (
@@ -122,8 +132,6 @@ function MediaPage() {
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <Icon className="size-3.5 text-accent" aria-hidden />
                       <span className="capitalize">{m.kind}</span>
-                      {m.durationSeconds ? <span>· {formatDuration(m.durationSeconds)}</span> : null}
-                      {m.pages ? <span>· {m.pages} pages</span> : null}
                     </div>
                     <h2 className="mt-1.5 font-display text-base font-semibold group-hover:text-accent">
                       {m.title}
@@ -168,6 +176,7 @@ function MediaPage() {
                   <dd className="font-medium">{active.license}</dd>
                 </div>
               </dl>
+
             </>
           )}
         </DialogContent>
