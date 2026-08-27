@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Download, Quote, Search, SlidersHorizontal, Upload } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { PageHero, PublicShell } from "@/components/site/public-shell";
 import { Badge } from "@/components/ui/badge";
@@ -18,10 +18,11 @@ import {
   accessLevels,
   datasets,
   regionFacets,
-  searchDatasets,
   themes,
   type DatasetQuery,
+  type Dataset,
 } from "@/features/repository/data";
+import { searchRepository } from "@/lib/api/search.functions";
 
 const title = "Data repository | India Polar Science Portal";
 const description =
@@ -48,10 +49,57 @@ const accessStyles: Record<string, string> = {
 function RepositoryIndex() {
   const [query, setQuery] = useState<DatasetQuery>({ sort: "recent" });
   const [showFilters, setShowFilters] = useState(false);
+  const [results, setResults] = useState<Dataset[]>(datasets);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const results = useMemo(() => searchDatasets(query), [query]);
   const set = <K extends keyof DatasetQuery>(key: K, value: DatasetQuery[K]) =>
     setQuery((q) => ({ ...q, [key]: value }));
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const runSearch = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await searchRepository({
+          data: {
+            q: query.q,
+            theme: query.theme,
+            region: query.region,
+            access: query.access,
+            from: query.from,
+            to: query.to,
+            sort: query.sort,
+            limit: 50,
+          },
+        });
+
+        if (!cancelled) {
+          setResults(response.hits);
+        }
+      } catch (err) {
+        console.error("Repository search failed:", err);
+
+        if (!cancelled) {
+          setError("Unable to search the repository right now. Please try again.");
+          setResults([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void runSearch();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [query]);
 
   const totalDownloads = datasets.reduce((sum, d) => sum + d.downloads, 0);
 
@@ -69,6 +117,7 @@ function RepositoryIndex() {
               Submit a dataset
             </Link>
           </Button>
+
           <p className="self-center text-sm text-primary-foreground/80">
             {new Intl.NumberFormat("en-IN").format(totalDownloads)} downloads served from these
             records
@@ -87,11 +136,13 @@ function RepositoryIndex() {
               <Label htmlFor="q" className="sr-only">
                 Search datasets
               </Label>
+
               <div className="relative">
                 <Search
                   className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                   aria-hidden
                 />
+
                 <Input
                   id="q"
                   className="pl-9"
@@ -101,6 +152,7 @@ function RepositoryIndex() {
                 />
               </div>
             </div>
+
             <Button
               type="button"
               variant="outline"
@@ -111,10 +163,12 @@ function RepositoryIndex() {
               <SlidersHorizontal className="mr-2 size-4" aria-hidden />
               Filters
             </Button>
+
             <div className="w-full sm:w-48">
               <Label htmlFor="sort" className="sr-only">
                 Sort results
               </Label>
+
               <Select
                 value={query.sort ?? "recent"}
                 onValueChange={(v) => set("sort", v as DatasetQuery["sort"])}
@@ -122,6 +176,7 @@ function RepositoryIndex() {
                 <SelectTrigger id="sort">
                   <SelectValue />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectItem value="relevance">Relevance</SelectItem>
                   <SelectItem value="recent">Most recent</SelectItem>
@@ -132,15 +187,28 @@ function RepositoryIndex() {
             </div>
           </div>
 
-          <div id="facets" className={showFilters ? "mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5" : "hidden"}>
+          <div
+            id="facets"
+            className={
+              showFilters
+                ? "mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5"
+                : "hidden"
+            }
+          >
             <div>
               <Label htmlFor="theme">Theme</Label>
-              <Select value={query.theme ?? "all"} onValueChange={(v) => set("theme", v)}>
+
+              <Select
+                value={query.theme ?? "all"}
+                onValueChange={(v) => set("theme", v)}
+              >
                 <SelectTrigger id="theme" className="mt-1.5">
                   <SelectValue />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectItem value="all">All themes</SelectItem>
+
                   {themes.map((t) => (
                     <SelectItem key={t} value={t}>
                       {t}
@@ -149,14 +217,21 @@ function RepositoryIndex() {
                 </SelectContent>
               </Select>
             </div>
+
             <div>
               <Label htmlFor="region">Region</Label>
-              <Select value={query.region ?? "all"} onValueChange={(v) => set("region", v)}>
+
+              <Select
+                value={query.region ?? "all"}
+                onValueChange={(v) => set("region", v)}
+              >
                 <SelectTrigger id="region" className="mt-1.5">
                   <SelectValue />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectItem value="all">All regions</SelectItem>
+
                   {regionFacets.map((r) => (
                     <SelectItem key={r} value={r}>
                       {r}
@@ -165,14 +240,21 @@ function RepositoryIndex() {
                 </SelectContent>
               </Select>
             </div>
+
             <div>
               <Label htmlFor="access">Access</Label>
-              <Select value={query.access ?? "all"} onValueChange={(v) => set("access", v)}>
+
+              <Select
+                value={query.access ?? "all"}
+                onValueChange={(v) => set("access", v)}
+              >
                 <SelectTrigger id="access" className="mt-1.5">
                   <SelectValue />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectItem value="all">Any access level</SelectItem>
+
                   {accessLevels.map((a) => (
                     <SelectItem key={a.value} value={a.value}>
                       {a.label}
@@ -181,8 +263,10 @@ function RepositoryIndex() {
                 </SelectContent>
               </Select>
             </div>
+
             <div>
               <Label htmlFor="from">Published from</Label>
+
               <Input
                 id="from"
                 type="date"
@@ -191,8 +275,10 @@ function RepositoryIndex() {
                 onChange={(e) => set("from", e.target.value)}
               />
             </div>
+
             <div>
               <Label htmlFor="to">Published to</Label>
+
               <Input
                 id="to"
                 type="date"
@@ -206,21 +292,47 @@ function RepositoryIndex() {
 
         <div className="mt-6 flex items-center justify-between">
           <p className="text-sm text-muted-foreground" role="status" aria-live="polite">
-            {results.length} {results.length === 1 ? "dataset" : "datasets"} match your query
+            {loading
+              ? "Searching repository…"
+              : `${results.length} ${results.length === 1 ? "dataset" : "datasets"
+              } match your query`}
           </p>
-          {(query.q || query.theme || query.region || query.access || query.from || query.to) && (
-            <Button variant="ghost" size="sm" onClick={() => setQuery({ sort: "recent" })}>
-              Clear all filters
-            </Button>
-          )}
+
+          {(query.q ||
+            query.theme ||
+            query.region ||
+            query.access ||
+            query.from ||
+            query.to) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setQuery({ sort: "recent" })}
+              >
+                Clear all filters
+              </Button>
+            )}
         </div>
 
-        {results.length === 0 ? (
-          <div className="mt-8 rounded-xl border border-dashed border-border bg-muted/30 p-10 text-center">
-            <h2 className="font-display text-lg font-semibold">No datasets matched</h2>
+        {error ? (
+          <div className="mt-8 rounded-xl border border-destructive/30 bg-destructive/5 p-10 text-center">
+            <h2 className="font-display text-lg font-semibold">
+              Repository search unavailable
+            </h2>
+
             <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-              Try a broader theme, widen the publication date range, or search a variable name such
-              as "salinity" or "delta_18O".
+              {error}
+            </p>
+          </div>
+        ) : results.length === 0 && !loading ? (
+          <div className="mt-8 rounded-xl border border-dashed border-border bg-muted/30 p-10 text-center">
+            <h2 className="font-display text-lg font-semibold">
+              No datasets matched
+            </h2>
+
+            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+              Try a broader theme, widen the publication date range, or search a
+              variable name such as "salinity" or "delta_18O".
             </p>
           </div>
         ) : (
@@ -229,13 +341,19 @@ function RepositoryIndex() {
               <li key={d.id}>
                 <article className="rounded-xl border border-border bg-card p-5 shadow-sm transition-colors hover:border-accent">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge className={accessStyles[d.access]}>{d.access}</Badge>
+                    <Badge className={accessStyles[d.access]}>
+                      {d.access}
+                    </Badge>
+
                     <Badge variant="secondary">{d.theme}</Badge>
+
                     <Badge variant="outline">{d.expeditionCode}</Badge>
+
                     <span className="text-xs text-muted-foreground">
                       {d.version} · published {d.published}
                     </span>
                   </div>
+
                   <h2 className="mt-2 font-display text-lg font-semibold">
                     <Link
                       to="/repository/$id"
@@ -245,9 +363,11 @@ function RepositoryIndex() {
                       {d.title}
                     </Link>
                   </h2>
+
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {d.abstract.slice(0, 220)}…
                   </p>
+
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {d.keywords.map((k) => (
                       <span
@@ -258,17 +378,22 @@ function RepositoryIndex() {
                       </span>
                     ))}
                   </div>
+
                   <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
                     <span>{d.region}</span>
+
                     <span>PI {d.pi}</span>
+
                     <span className="inline-flex items-center gap-1">
                       <Download className="size-3.5" aria-hidden />
                       {new Intl.NumberFormat("en-IN").format(d.downloads)}
                     </span>
+
                     <span className="inline-flex items-center gap-1">
                       <Quote className="size-3.5" aria-hidden />
                       {d.citations} citations
                     </span>
+
                     <span>{d.license}</span>
                   </div>
                 </article>

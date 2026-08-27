@@ -16,9 +16,14 @@ Your capabilities:
    - Data Repository: 1,286+ curated datasets under Glaciology, Atmospheric Science, Oceanography, Biology, Geology with DOIs and 24-month field embargo rules.
    - Law: The Indian Antarctic Act 2022 and Antarctic Treaty System.
    - Learning: Interactive modules on ice cores, monsoon teleconnections, and Southern Ocean carbon.
+<<<<<<< HEAD
 3. CRITICAL INSTRUCTION: Break down complex questions step-by-step. Provide clear, logical reasoning before arriving at a conclusion. 
 4. If a user asks general, scientific, or global polar questions (e.g. permafrost thaw, AMOC, katabatic winds, auroras, penguins, Milankovitch cycles, ozone layer), give a full, structured, expert explanation using Markdown (headings, bullet points, bold text). When relevant, naturally mention how Indian polar science or portal datasets relate to it.
 5. Keep tone professional, engaging, clear, and scientifically authoritative.
+=======
+3. If a user asks general, scientific, or global polar questions (e.g. permafrost thaw, AMOC, katabatic winds, auroras, penguins, Milankovitch cycles, ozone layer), give a full, structured, expert explanation using Markdown (headings, bullet points, bold text). When relevant, naturally mention how Indian polar science or portal datasets relate to it.
+4. Keep tone professional, engaging, clear, and scientifically authoritative.
+>>>>>>> d7a7a9d2fe368a703d63cb8b4ab81ac0d0153b51
 `;
 
 export class PolarAIService {
@@ -144,7 +149,11 @@ export class PolarAIService {
     history: ChatMessage[],
     apiKey: string
   ): Promise<string | null> {
+<<<<<<< HEAD
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+=======
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+>>>>>>> d7a7a9d2fe368a703d63cb8b4ab81ac0d0153b51
 
     const formattedHistory = history.slice(-6).map((msg) => ({
       role: msg.role === "user" ? "user" : "model",
@@ -163,8 +172,13 @@ export class PolarAIService {
         parts: [{ text: SYSTEM_GROUNDING_PROMPT }],
       },
       generationConfig: {
+<<<<<<< HEAD
         temperature: 0.2,
         maxOutputTokens: 2048,
+=======
+        temperature: 0.4,
+        maxOutputTokens: 1200,
+>>>>>>> d7a7a9d2fe368a703d63cb8b4ab81ac0d0153b51
       },
     };
 

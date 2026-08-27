@@ -159,6 +159,7 @@ function AuthPage() {
               <TabsTrigger value="register">Register</TabsTrigger>
             </TabsList>
             <TabsContent value="signin" className="mt-6">
+<<<<<<< HEAD
               {isForgotPassword ? (
                 <form
                   className="space-y-4 rounded-xl border border-border bg-card p-6"
@@ -241,6 +242,42 @@ function AuthPage() {
                   </p>
                 </form>
               )}
+=======
+              <form
+                className="space-y-4 rounded-xl border border-border bg-card p-6"
+                onSubmit={handleSignIn}
+              >
+                <div>
+                  <Label htmlFor="email">Institutional email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    className="mt-1.5"
+                    placeholder="name@institution.res.in"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    className="mt-1.5"
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={pending}>
+                  <KeyRound className="mr-2 size-4" aria-hidden />
+                  Sign in
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  Sessions use a 15-minute JWT access token and a rotating refresh cookie with
+                  reuse detection. No credentials are stored in the browser.
+                </p>
+              </form>
+>>>>>>> d7a7a9d2fe368a703d63cb8b4ab81ac0d0153b51
             </TabsContent>
             <TabsContent value="register" className="mt-6">
               <form
